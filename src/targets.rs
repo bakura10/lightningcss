@@ -242,16 +242,10 @@ impl Targets {
 
   pub(crate) fn prefixes(&self, prefix: VendorPrefix, feature: crate::prefixes::Feature) -> VendorPrefix {
     if prefix.contains(VendorPrefix::None) && !self.exclude.contains(Features::VendorPrefixes) {
-      let prefixes = if self.include.contains(Features::VendorPrefixes) {
+      if self.include.contains(Features::VendorPrefixes) {
         VendorPrefix::all()
       } else {
         self.browsers.map(|browsers| feature.prefixes_for(browsers)).unwrap_or(prefix)
-      };
-
-      if matches!(feature, crate::prefixes::Feature::TextSizeAdjust) && self.browsers.is_some() {
-        prefixes | VendorPrefix::WebKit
-      } else {
-        prefixes
       }
     } else {
       prefix
